@@ -1,0 +1,32 @@
+log_parser:
+  # Регулярные выражения для различных форматов логов nginx
+  log_formats:
+    combined: '^(?P<remote_addr>\S+) - (?P<remote_user>\S+) \[(?P<time_local>[\w:/]+\s[+\-]\d{4})\] "(?P<request>(?P<method>\w+)\s+(?P<path>[^\s?]+)[^"]*)" (?P<status>\d+) (?P<body_bytes_sent>\d+)'
+    main: '^(?P<remote_addr>\S+) - (?P<remote_user>\S+) \[(?P<time_local>[\w:/]+\s[+\-]\d{4})\] "(?P<request>[^"]*)" (?P<status>\d+)'
+    custom: '^(?P<remote_addr>\S+) - (?P<remote_user>\S+) \[(?P<time_local>[\w:/]+\s[+\-]\d{4})\] "(?P<method>\w+)\s+(?P<path>[^\s?]+)[^"]*"\s+(?P<status>\d+)'
+
+  # Настройки парсера
+  settings:
+    max_workers: 4
+    chunk_size: 1000
+    max_path_depth: 4
+    default_log_format: "combined"
+    encoding: "utf-8"
+    date_format: "%d/%b/%Y:%H:%M:%S %z"
+
+  # Игнорируемые пути
+  ignore_paths:
+    - "/health"
+    - "/favicon.ico"
+    - "/robots.txt"
+
+  # IP-адреса для исключения (не будут обрабатываться)
+  exclude_ips:
+    - "127.0.0.1"
+    - "192.168.1.100"
+    - "10.0.0.1"
+
+  # IP-адреса для включения (будут обрабатываться только эти, если указаны)
+  include_ips:
+    # - "192.168.1.1"
+    # - "192.168.1.2"
